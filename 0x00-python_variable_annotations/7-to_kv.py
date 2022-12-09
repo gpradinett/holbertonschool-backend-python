@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
+""" Takes a string k and an int OR float, returns a tuple """
 
-to_kv = __import__('7-to_kv').to_kv
+from typing import Tuple, Union
 
-print(to_kv.__annotations__)
-print(to_kv("eggs", 3))
-print(to_kv("school", 0.02))
+
+def to_kv(k: str, v: Union[int, float]) -> Tuple[str, float]:
+    """Takes a string and int/float and returns a tuple"""
+    return (k, v ** 2)
