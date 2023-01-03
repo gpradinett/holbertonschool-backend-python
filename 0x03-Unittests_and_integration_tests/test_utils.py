@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 """
 Familiarize yourself with the utils.access_nested_map
 """
@@ -9,29 +9,25 @@ from utils import access_nested_map, get_json, memoize
 
 
 class TestAccessNestedMap(unittest.TestCase):
-    """
-    A class for testing utils.access_nested_map method
-    """
-    @parameterized.expand([
-        ({"a": 1}, ("a",), 1),
-        ({"a": {"b": 2}}, ("a",), {'b': 2}),
-        ({"a": {"b": 2}}, ("a", "b"), 2)
-    ])
-    def test_access_nested_map(self, mapp, path, expected):
-        """Sucess testing for access_nested_map method
-        """
-        self.assertEqual(access_nested_map(mapp, path), expected)
+    """ unittests for nested map function """
 
     @parameterized.expand([
-        ({}, ("a",), "a"),
-        ({"a": 1}, ("a", "b"), "b")
+        ({"a": 1}, ("a",), 1),
+        ({"a": {"b": 2}}, ("a",), {"b": 2}),
+        ({"a": {"b": 2}}, ("a", "b"), 2)
     ])
-    def test_access_nested_map_exception(self, mapp, path, error):
-        """Testing failure of utils.access_nested_map method
-        """
-        with self.assertRaises(KeyError):
-            try:
-                access_nested_map(mapp, path)
-            except KeyError as e:
-                self.assertEqual(e.args[0], error)
-                raise
+    def test_access_nested_map(self, nested_map, path, expected_value):
+        """ unittest for the function """
+        self.assertEqual(access_nested_map(nested_map, path), expected_value)
+
+    @parameterized.expand([
+        ({}, ('a',), KeyError('a')),
+        ({"a": 1}, ("a", "b"), KeyError('b'))
+    ])
+    def test_access_nested_map_exception(
+            self, nested_map, path, expected_value):
+        """ Unittest for exception in a nested map function """
+        with self.assertRaises(KeyError) as error:
+            access_nested_map(nested_map=nested_map, path=path)
+
+        self.assertEqual(repr(error.exception), repr(expected_value))
